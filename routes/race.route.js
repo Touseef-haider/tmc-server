@@ -7,15 +7,16 @@ router.post("/liveScore", async (req, res, next) => {
     const { link } = req.body;
     console.log(link);
     const data = await liveScore(link);
-    console.log("___________________", data);
     const cursor = await scrapedDataCollection.find({});
     let doc = await cursor.toArray();
     doc = doc[0];
-    const race = (doc?.racesData).find((s) => s?.SLIFELink === link);
+    let race = (doc?.racesData).find((s) => s?.SLIFELink === link);
     race = {
       ...race,
       liveScore: data,
     };
+
+    console.log("___________________", race);
     const index = (doc?.racesData).findIndex((s) => s?.SLIFELink === link);
     if (index >= 0) {
       doc.racesData[index] = race;
