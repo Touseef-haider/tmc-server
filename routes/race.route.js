@@ -12,7 +12,10 @@ router.post("/liveScore", async (req, res, next) => {
     let doc = await cursor.toArray();
     doc = doc[0];
     const race = (doc?.racesData).find((s) => s?.SLIFELink === link);
-    race.liveScore = data;
+    race = {
+      ...race,
+      liveScore: data,
+    };
     const index = (doc?.racesData).findIndex((s) => s?.SLIFELink === link);
     if (index >= 0) {
       doc.racesData[index] = race;
