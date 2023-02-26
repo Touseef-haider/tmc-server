@@ -42,7 +42,7 @@ exports.liveScore = async function liveScore(link) {
     let arr = [];
     rows.map((i, e) => {
       let result = "";
-      // const horseName = $(e).find(".LiveShow__HorseName-mr0xq3-9").text();
+      const horseName = $(e).find(".LiveShow__HorseName-mr0xq3-9").text();
       const liveOdds = $(e).find(".LiveShow__MatchOddsText-mr0xq3-6").html();
       const liveOddData = $(liveOdds).find("span > span").text();
       if (liveOddData) {
