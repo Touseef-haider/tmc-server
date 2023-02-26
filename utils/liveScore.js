@@ -3,16 +3,6 @@ const cheerio = require("cheerio");
 
 exports.liveScore = async function liveScore(link) {
   try {
-    // const database = client.db("horse-races");
-    // const scrapedDataCollection = database.collection("scrapedData");
-    // const cursor = await scrapedDataCollection
-    //   .find({
-
-    //   })
-    //   .limit(1)
-    //   .sort({ $natural: -1 });
-    // let doc = await cursor.toArray();
-    // doc = doc[0];
     const browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -53,19 +43,21 @@ exports.liveScore = async function liveScore(link) {
     rows.map((i, e) => {
       let result = "";
       const horseName = $(e).find(".LiveShow__HorseName-mr0xq3-9").text();
-      result += horseName + ",";
       const liveOdds = $(e).find(".LiveShow__MatchOddsText-mr0xq3-6").html();
       const liveOddData = $(liveOdds).find("span > span").text();
-
       if (liveOddData) {
-        result += liveOddData + ",";
+        result += liveOddData.split(",")[0];
       } else {
-        const odd = $(e).find(".BetLink__BetLinkStyle-jgjcm-0").html();
-        const oddNumber = $(e).find("span").text();
-        result += oddNumber;
+        const odd = $(e).find(".BetLink__BetLinkStyle-jgjcm-0 span").html();
+
+        result += odd;
       }
 
-      arr.push(result);
+      arr.push({
+        score: horseName + " " + result,
+        value: eval(result),
+        horseName,
+      });
     });
     await browser.close();
     return arr;

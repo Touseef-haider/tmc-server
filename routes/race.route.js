@@ -16,11 +16,11 @@ router.post("/liveScore", async (req, res, next) => {
       liveScore: data,
     };
 
-    console.log("___________________", race);
     const index = (doc?.racesData).findIndex((s) => s?.SLIFELink === link);
     if (index >= 0) {
       doc.racesData[index] = race;
     }
+    console.log("doc", doc?._id);
     await scrapedDataCollection.replaceOne({ _id: doc._id }, doc);
     return res.status(200).json(data);
   } catch (err) {
