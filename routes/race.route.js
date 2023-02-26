@@ -4,23 +4,27 @@ const { liveScore } = require("../utils/liveScore");
 
 router.post("/liveScore", async (req, res, next) => {
   try {
-    const { link } = req.body;
-    console.log(link);
-    const data = await liveScore(link);
-    const cursor = await scrapedDataCollection.find({});
+    let { link, date, index } = req.body;
+
+    date = date.replaceAll("-", "/");
+    const cursor = await scrapedDataCollection.find({ date });
     let doc = await cursor.toArray();
     doc = doc[0];
-    let race = (doc?.racesData).find((s) => s?.SLIFELink === link);
+    // doc.racesData.sort((a, b) => a.ATR.localeCompare(b.ATR));
+    // const race = doc.racesData[index - 1];
+    let race = doc.racesData.find((race) => race.index == index);
+    const data = await liveScore(link);
     race = {
       ...race,
       liveScore: data,
     };
-
-    const index = (doc?.racesData).findIndex((s) => s?.SLIFELink === link);
-    if (index >= 0) {
-      doc.racesData[index] = race;
+    const ind = doc.racesData.findIndex((race) => race.index == index);
+    console.log("a0a00a", ind, race);
+    if (ind >= 0) {
+      doc.racesData[ind] = race;
     }
     console.log("doc", doc?._id);
+
     await scrapedDataCollection.replaceOne({ _id: doc._id }, doc);
     return res.status(200).json(data);
   } catch (err) {
