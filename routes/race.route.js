@@ -20,8 +20,8 @@ router.post("/liveScore", async (req, res, next) => {
     if (index >= 0) {
       doc.racesData[index] = race;
     }
-    console.log("doc", doc?._id);
     await scrapedDataCollection.findOneAndUpdate({ _id: doc?._id }, doc);
+    console.log(JSON.stringify(doc));
     return res.status(200).json(data);
   } catch (err) {
     console.log(err);
