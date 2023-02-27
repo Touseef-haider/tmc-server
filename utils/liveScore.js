@@ -60,7 +60,8 @@ exports.liveScore = async function liveScore(link) {
       });
     });
     await browser.close();
-    return arr;
+    arr.sort((a, b) => a?.value - b?.value);
+    return arr?.map((a, index) => ({ ...a, index: index + 1 }));
   } catch (error) {
     process.exit();
   }
