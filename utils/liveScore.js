@@ -47,20 +47,21 @@ exports.liveScore = async function liveScore(link) {
       const liveOddData = $(liveOdds).find("span > span").text();
       if (liveOddData) {
         result += liveOddData.split(",")[0];
-      } else {
-        const odd = $(e).find(".BetLink__BetLinkStyle-jgjcm-0 span").html();
-
-        result += odd;
       }
+      // else {
+      //   const odd = $(e).find(".BetLink__BetLinkStyle-jgjcm-0 span").html();
 
-      arr.push({
-        score: result,
-        value: eval(result),
-        horseName,
-      });
+      //   result += odd;
+      // }
+      if (result.replace(",", "").length > 0) {
+        arr.push({
+          score: result,
+          value: eval(result),
+          horseName,
+        });
+      }
     });
     await browser.close();
-    arr.sort((a, b) => a?.value - b?.value);
     return arr?.map((a, index) => ({ ...a, index: index + 1 }));
   } catch (error) {
     process.exit();
