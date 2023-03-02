@@ -44,18 +44,15 @@ exports.liveScore = async function liveScore(link) {
       let result = "";
       const horseName = $(e).find(".LiveShow__HorseName-mr0xq3-9").text();
       const liveOdds = $(e).find(".LiveShow__MatchOddsText-mr0xq3-6").html();
+      const horseNumber = $(e).find(".LiveShow__ClothNumber-mr0xq3-10").text();
       const liveOddData = $(liveOdds).find("span > span").text();
       if (liveOddData) {
         result += liveOddData.split(",")[0];
       }
-      // else {
-      //   const odd = $(e).find(".BetLink__BetLinkStyle-jgjcm-0 span").html();
 
-      //   result += odd;
-      // }
       if (result.replace(",", "").length > 0) {
         arr.push({
-          score: result,
+          score: horseNumber + " " + result,
           value: eval(result),
           horseName,
         });
@@ -64,6 +61,7 @@ exports.liveScore = async function liveScore(link) {
     await browser.close();
     return arr?.map((a, index) => ({ ...a, index: index + 1 }));
   } catch (error) {
+    console.log(error);
     process.exit();
   }
 };
