@@ -4,3 +4,6 @@ node_modules
 node_modules
 package-lock.json
 >>>>>>> 396517c2a6a547b8e87172f9d5a7c18248263630
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
